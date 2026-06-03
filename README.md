@@ -1,7 +1,7 @@
 <div align="center">
 
 ```
-▊ COBOL-DOC
+▊ <h1> COBOL-DOC </h1>
 ```
 
 **Generador de documentación para proyectos COBOL Mainframe**  
