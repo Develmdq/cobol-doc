@@ -1,8 +1,8 @@
 <div align="center">
 
-```
-▊ <h1> COBOL-DOC </h1>
-```
+
+##  COBOL-DOC  
+
 
 **Generador de documentación para proyectos COBOL Mainframe**  
 *Lee los comentarios del fuente. Genera un sitio navegable. Sin instalar nada.*
