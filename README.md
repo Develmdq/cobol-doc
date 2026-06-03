@@ -1,7 +1,7 @@
 <div align="center">
 
 ```
-▊ COBOLDoc
+▊ COBOL-DOC
 ```
 
 **Generador de documentación para proyectos COBOL Mainframe**  
@@ -166,6 +166,4 @@ Esto permite documentar dependencias entre programas sin repetir la documentaci�
 
 ---
 
-<div align="center">
-<sub>COBOLDoc — documentación generada desde comentarios de código fuente</sub>
-</div>
+
