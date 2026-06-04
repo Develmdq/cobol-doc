@@ -340,7 +340,7 @@
     .project-input {
       width: 100%;
       font-family: var(--sans);
-      font-size: 24px;
+      font-size: 16px;
       font-weight: 600;
       background: transparent;
       border: none;
@@ -360,10 +360,21 @@
       border-bottom-color: var(--accent)
     }
 
+   .view-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
     .drop-area {
+      flex: 0 1 500px;
       border: 2px dashed var(--border2);
       border-radius: 16px;
-      padding: 4rem 6rem;
+      padding: 2.5rem 1.5rem;
       max-width: 600px;
       width: 100%;
       transition: border-color .2s, background .2s;
@@ -371,7 +382,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem
+      gap: 1rem;
+
     }
 
     .drop-area:hover,
@@ -379,6 +391,18 @@
       border-color: var(--accent);
       background: rgba(88, 166, 255, .04)
     }
+
+    .drop-area,
+.added-files {
+  flex: 0 1 500px;       /* no crecen, pueden encogerse, base 500px */
+  max-width: none;        /* anula el max-width anterior */
+  margin: 0;              /* anula cualquier margin: auto */
+  width: auto;
+}
+
+.added-files {
+  flex-basis: 400px;      /* un poco más angosto */
+}
 
     .drop-icon {
       font-size: 64px;
@@ -782,9 +806,7 @@
         padding: 0 1rem
       }
 
-      .drop-area {
-        padding: 2.5rem 1.5rem
-      }
+
     }
   </style>
 </head>
@@ -821,26 +843,28 @@
             <input class="project-input" id="project-url" type="url" placeholder="https://github.com/usuario/repo"
               autocomplete="off">
           </div>
-          <div class="drop-area" id="drop-area" onclick="triggerFileInput()">
-            <div class="drop-icon">📂</div>
-            <div class="drop-title">Arrastre sus archivos aquí</div>
-            <div class="drop-sub">Soporta múltiples archivos en el orden de carga</div>
-            <button class="btn btn-primary" style="pointer-events:none">Seleccionar archivos</button>
-            <div class="drop-formats">
-              <span class="format-badge">.cbl</span>
-              <span class="format-badge">.cob</span>
-              <span class="format-badge">.jcl</span>
-              <span class="format-badge">.cpy</span>
-              <span class="format-badge">.sql</span>
-              <span class="format-badge">.txt</span>
+          <div class="view-center">
+            <div class="drop-area" id="drop-area" onclick="triggerFileInput()">
+              <div class="drop-icon">📂</div>
+              <div class="drop-title">Arrastre sus archivos aquí</div>
+              <div class="drop-sub">Soporta múltiples archivos en el orden de carga</div>
+              <button class="btn btn-primary" style="pointer-events:none">Seleccionar archivos</button>
+              <div class="drop-formats">
+                <span class="format-badge">.cbl</span>
+                <span class="format-badge">.cob</span>
+                <span class="format-badge">.jcl</span>
+                <span class="format-badge">.cpy</span>
+                <span class="format-badge">.sql</span>
+                <span class="format-badge">.txt</span>
+              </div>
             </div>
-          </div>
-          <div class="added-files" id="pending-list" style="display:none">
-            <div class="added-files-title">Datasets cargados</div>
-            <div id="pending-rows"></div>
-            <div style="margin-top:1rem;display:flex;gap:8px">
-              <button class="btn btn-primary" onclick="buildDocs()">Generar documentación</button>
-              <button class="btn" onclick="triggerFileInput()">+ Más datasets</button>
+            <div class="added-files" id="pending-list" style="display:none">
+              <div class="added-files-title">Archivos cargados</div>
+              <div id="pending-rows"></div>
+              <div style="margin-top:1rem;gap:8px">
+                <button class="btn btn-primary" onclick="buildDocs()">Generar documentación</button>
+
+              </div>
             </div>
           </div>
         </div>
