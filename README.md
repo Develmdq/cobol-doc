@@ -1,10 +1,8 @@
 <div align="center">
 
+##  COBOL-DOC
 
-##  COBOL-DOC  
-
-
-**Generador de documentación para proyectos COBOL Mainframe**  
+**Generador de documentación para proyectos COBOL Mainframe**
 *Lee los comentarios del fuente. Genera un sitio navegable. Sin instalar nada.*
 
 [![GitHub Pages](https://img.shields.io/badge/demo-live-58a6ff?style=flat-square&logo=github)](https://develmdq.github.io/cobol-doc)
@@ -16,9 +14,7 @@
 
 ## ¿Qué es?
 
-Un único archivo HTML — doble clic, abre en el navegador — que procesa archivos fuente COBOL y genera documentación navegable lista para publicar en **GitHub Pages**.
-
-No requiere Node.js, Python, ni ninguna dependencia externa.
+Un único archivo HTML — doble clic, abre en el navegador — que procesa archivos fuente y genera documentación navegable lista para publicar en **GitHub Pages**.
 
 ---
 
@@ -28,7 +24,7 @@ No requiere Node.js, Python, ni ninguna dependencia externa.
 2. Ingresar el nombre del proyecto
 3. Arrastrar los archivos fuente
 4. Clic en **Generar documentación**
-5. **Exportar HTML** → `index.html` listo para GitHub Pages  
+5. **Exportar HTML** → `index.html` listo para GitHub Pages
    **Exportar PDF** → versión imprimible
 
 ---
@@ -43,7 +39,7 @@ No requiere Node.js, Python, ni ninguna dependencia externa.
 
 ### La regla principal
 
-**Solo se documenta lo que está dentro de un bloque `*>**`.**  
+**Solo se documenta lo que está dentro de un bloque `*>**`.**
 Todo lo que esté fuera — comentarios técnicos, notas de código — es ignorado por el generador.
 
 ```cobol
@@ -112,7 +108,7 @@ Cada línea `@change` genera una fila en la tabla de historial. Formato: `fecha 
       * @uses: NOMBRE_RUTINA
 ```
 
-`@see` genera un badge con link al repositorio de la rutina referenciada.  
+`@see` genera un badge con link al repositorio de la rutina referenciada.
 `@uses` genera un badge sin link — útil cuando la rutina no tiene repositorio publicado.
 
 Esto permite documentar dependencias entre programas sin repetir la documentación de cada rutina en cada programa que la utiliza.
