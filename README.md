@@ -37,7 +37,13 @@ Un único archivo HTML — doble clic, abre en el navegador — que procesa arch
 
 ## Cómo documentar el código fuente
 
-### La regla principal
+### Reglas principales
+
+**El input "Nombre del proyecto"**
+Se renderizará como h1 como título de la documentación del proyecto.
+
+**El input "URL del repositorio (GitHub)"**
+Se vincula a un botón en el HTML final para acceder al repositorio documentado.
 
 **Solo se documenta lo que está dentro de un bloque `*>**`.**
 Todo lo que esté fuera — comentarios técnicos, notas de código — es ignorado por el generador.
@@ -56,8 +62,8 @@ Un archivo puede tener tantos bloques como sea necesario. Cada bloque `*>**` gen
 
 | Marca | Resultado |
 |-------|-----------|
-| `*= Texto` | **Título H1** — color azul, aparece en el índice lateral |
-| `*-* Texto` | **Subtítulo H2** — color violeta, aparece en el índice lateral |
+| `*= Texto` | **Título H2** — color azul, aparece en el índice lateral |
+| `*-* Texto` | **Subtítulo H3** — color violeta, aparece en el índice lateral |
 | `* @directiva: valor` | Render especial según la directiva (ver abajo) |
 | `* Texto libre` | Párrafo de documentación |
 | `*-` | Separador horizontal |

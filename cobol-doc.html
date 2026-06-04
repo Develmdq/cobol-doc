@@ -262,7 +262,7 @@
       list-style: none
     }
 
-    .toc-h1>a {
+    .toc-h2>a {
       display: block;
       padding: 4px 16px 4px 24px;
       font-family: var(--mono);
@@ -275,12 +275,12 @@
       text-overflow: ellipsis
     }
 
-    .toc-h1>a:hover {
+    .toc-h2>a:hover {
       color: #88c4ff;
       text-decoration: none
     }
 
-    .toc-h2>a {
+    .toc-h3>a {
       display: block;
       padding: 3px 16px 3px 36px;
       font-family: var(--mono);
@@ -292,7 +292,7 @@
       text-overflow: ellipsis
     }
 
-    .toc-h2>a:hover {
+    .toc-h3>a:hover {
       color: #d4aaff;
       text-decoration: none
     }
@@ -360,15 +360,15 @@
       border-bottom-color: var(--accent)
     }
 
-   .view-center {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 2rem;
-  flex-wrap: wrap;
-  width: 100%;
-}
+    .view-center {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 2rem;
+      flex-wrap: wrap;
+      width: 100%;
+    }
 
     .drop-area {
       flex: 0 1 500px;
@@ -383,7 +383,6 @@
       flex-direction: column;
       align-items: center;
       gap: 1rem;
-
     }
 
     .drop-area:hover,
@@ -393,16 +392,16 @@
     }
 
     .drop-area,
-.added-files {
-  flex: 0 1 500px;       /* no crecen, pueden encogerse, base 500px */
-  max-width: none;        /* anula el max-width anterior */
-  margin: 0;              /* anula cualquier margin: auto */
-  width: auto;
-}
+    .added-files {
+      flex: 0 1 500px;
+      max-width: none;
+      margin: 0;
+      width: auto;
+    }
 
-.added-files {
-  flex-basis: 400px;      /* un poco más angosto */
-}
+    .added-files {
+      flex-basis: 400px;
+    }
 
     .drop-icon {
       font-size: 64px;
@@ -463,7 +462,27 @@
       border-radius: 6px;
       background: var(--bg2);
       margin-bottom: 4px;
-      border: 1px solid var(--border)
+      border: 1px solid var(--border);
+      cursor: grab;
+      user-select: none;
+    }
+
+    .added-file-row.dragging {
+      opacity: 0.4;
+      cursor: grabbing;
+    }
+
+    .added-file-row.drag-target {
+      border-color: var(--accent);
+      background: rgba(88,166,255,.08);
+    }
+
+    .drag-handle {
+      color: var(--muted);
+      font-size: 14px;
+      cursor: grab;
+      padding: 0 4px;
+      flex-shrink: 0;
     }
 
     .added-file-name {
@@ -543,7 +562,7 @@
     }
 
     /* DOC ELEMENTS */
-    .doc-h1 {
+    .doc-h2 {
       font-size: 22px;
       font-weight: 700;
       color: var(--accent);
@@ -551,7 +570,7 @@
       line-height: 1.3
     }
 
-    .doc-h2 {
+    .doc-h3 {
       font-size: 16px;
       font-weight: 600;
       color: var(--purple);
@@ -561,7 +580,7 @@
       gap: 8px
     }
 
-    .doc-h2::before {
+    .doc-h3::before {
       content: '';
       display: inline-block;
       width: 4px;
@@ -805,8 +824,6 @@
       .topbar {
         padding: 0 1rem
       }
-
-
     }
   </style>
 </head>
@@ -818,12 +835,10 @@
       <div class="topbar-actions">
         <span id="file-count-label" style="font-size:12px;color:var(--muted);display:none"></span>
         <button class="btn" id="btn-add-more" style="display:none" onclick="triggerAddMore()">+ Datasets</button>
-        <button class="btn btn-primary" id="btn-export" style="display:none" onclick="exportHtml()">Exportar
-          HTML</button>
+        <button class="btn btn-primary" id="btn-export" style="display:none" onclick="exportHtml()">Exportar HTML</button>
         <button class="btn btn-pdf" id="btn-pdf" style="display:none" onclick="exportPdf()">Exportar PDF</button>
         <button class="btn btn-danger btn-sm" id="btn-clear" style="display:none" onclick="clearAll()">Limpiar</button>
-        <button class="btn btn-info btn-sm" id="btn-readme" style="display:none" onclick="viewReadme()">README
-          GITHUB</button>
+        <button class="btn btn-info btn-sm" id="btn-readme" style="display:none" onclick="viewReadme()">README GITHUB</button>
       </div>
     </div>
     <div class="layout">
@@ -835,13 +850,11 @@
         <div id="upload-zone">
           <div class="project-input-wrap">
             <label class="project-input-label" for="project-name">Nombre del proyecto</label>
-            <input class="project-input" id="project-name" type="text" placeholder="Mi Proyecto COBOL"
-              autocomplete="off">
+            <input class="project-input" id="project-name" type="text" placeholder="Mi Proyecto COBOL" autocomplete="off">
           </div>
           <div class="project-input-wrap">
             <label class="project-input-label" for="project-url">URL del repositorio (GitHub)</label>
-            <input class="project-input" id="project-url" type="url" placeholder="https://github.com/usuario/repo"
-              autocomplete="off">
+            <input class="project-input" id="project-url" type="url" placeholder="https://github.com/usuario/repo" autocomplete="off">
           </div>
           <div class="view-center">
             <div class="drop-area" id="drop-area" onclick="triggerFileInput()">
@@ -863,7 +876,6 @@
               <div id="pending-rows"></div>
               <div style="margin-top:1rem;gap:8px">
                 <button class="btn btn-primary" onclick="buildDocs()">Generar documentación</button>
-
               </div>
             </div>
           </div>
@@ -877,7 +889,7 @@
 
   <script>
     // ── STATE ──
-    const state = { files: [], projectName: '' };
+    const state = { files: [], projectName: '', projectUrl: '' };
 
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('upload-zone').style.display = 'flex';
@@ -903,17 +915,57 @@
 
     function extType(e) { return { cbl: 'cbl', cob: 'cbl', jcl: 'jcl', cpy: 'cpy', sql: 'sql', txt: 'txt' }[e] || 'txt'; }
 
+    // ── DRAG & DROP REORDER IN PENDING LIST ──
+    let dragSrcId = null;
+
     function showPendingList() {
       document.getElementById('pending-list').style.display = 'block';
-      document.getElementById('pending-rows').innerHTML = state.files.map(f => `
-    <div class="added-file-row">
-      <span class="ftype ftype-${f.type}">${f.type.toUpperCase()}</span>
-      <span class="added-file-name">${f.name}</span>
-      <span class="added-file-size">${(f.size / 1024).toFixed(1)} KB</span>
-      <button class="btn btn-sm" style="color:var(--coral);border-color:var(--coral)" onclick="removeFile('${f.id}')">✕</button>
-    </div>`).join('');
+      const rows = document.getElementById('pending-rows');
+      rows.innerHTML = state.files.map(f => `
+        <div class="added-file-row" draggable="true" data-id="${f.id}"
+             ondragstart="onDragStart(event,'${f.id}')"
+             ondragover="onDragOver(event)"
+             ondragleave="onDragLeave(event)"
+             ondrop="onDrop(event,'${f.id}')"
+             ondragend="onDragEnd(event)">
+          <span class="drag-handle" title="Arrastrar para reordenar">⠿</span>
+          <span class="ftype ftype-${f.type}">${f.type.toUpperCase()}</span>
+          <span class="added-file-name">${f.name}</span>
+          <span class="added-file-size">${(f.size / 1024).toFixed(1)} KB</span>
+          <button class="btn btn-sm" style="color:var(--coral);border-color:var(--coral)" onclick="removeFile('${f.id}')">✕</button>
+        </div>`).join('');
     }
+
+    function onDragStart(e, id) {
+      dragSrcId = id;
+      e.currentTarget.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    }
+    function onDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      e.currentTarget.classList.add('drag-target');
+    }
+    function onDragLeave(e) {
+      e.currentTarget.classList.remove('drag-target');
+    }
+    function onDrop(e, targetId) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-target');
+      if (dragSrcId === targetId) return;
+      const srcIdx = state.files.findIndex(f => f.id === dragSrcId);
+      const tgtIdx = state.files.findIndex(f => f.id === targetId);
+      const [moved] = state.files.splice(srcIdx, 1);
+      state.files.splice(tgtIdx, 0, moved);
+      showPendingList();
+    }
+    function onDragEnd(e) {
+      e.currentTarget.classList.remove('dragging');
+      document.querySelectorAll('.added-file-row').forEach(r => r.classList.remove('drag-target'));
+    }
+
     function removeFile(id) { state.files = state.files.filter(f => f.id !== id); state.files.length ? showPendingList() : document.getElementById('pending-list').style.display = 'none'; }
+
     function clearAll() {
       state.files = []; state.projectName = '';
       document.getElementById('doc-output').style.display = 'none';
@@ -927,7 +979,7 @@
       ['btn-add-more', 'btn-export', 'btn-pdf', 'btn-clear', 'file-count-label'].forEach(id => document.getElementById(id).style.display = 'none');
     }
 
-    // ── DRAG & DROP ──
+    // ── DRAG & DROP FILE UPLOAD ──
     const dropArea = document.getElementById('drop-area');
     ['dragenter', 'dragover'].forEach(e => dropArea.addEventListener(e, ev => { ev.preventDefault(); dropArea.classList.add('drag-over') }));
     ['dragleave', 'drop'].forEach(e => dropArea.addEventListener(e, ev => { ev.preventDefault(); dropArea.classList.remove('drag-over') }));
@@ -936,42 +988,56 @@
     function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
     // ════════════════════════════════════════════════════════════════
-    // PARSER — same logic for all formats
-    // Only content between *>** ... *>** is documented
-    // Inside the block:
-    //   *=  text   → H1 (title)
-    //   *-* text   → H2 (subtitle)
-    //   *- @key:   → directive
-    //   *-         → <hr> separator
-    //   *          → blank line
-    //   * text     → paragraph
+    // PARSER
     // ════════════════════════════════════════════════════════════════
-    function parseBlocks(src, programId) {
+    function parseBlocks(src, programId, type) {
       const lines = src.split('\n');
       const blocks = [];
       let inBlock = false;
       let blockLines = [];
 
+      const delimiterRegex = {
+        jcl: /^\/\/\*>\s*\*\*\s*$/,
+        sql: /^--\*>\s*\*\*\s*$/,
+      };
+      const contentRegex = {
+        jcl: /^\/\/\*/,
+        sql: /^--/,
+      };
+
+      const isDelimiter = (line) => {
+        if (type === 'jcl') return delimiterRegex.jcl.test(line);
+        if (type === 'sql') return delimiterRegex.sql.test(line);
+        return /^\s*\*>\s*\*\*\s*$/.test(line);
+      };
+
+      const extractContent = (line) => {
+        if (type === 'jcl') return contentRegex.jcl.test(line) ? line.replace(/^\/\/\*/, '*') : null;
+        if (type === 'sql') return contentRegex.sql.test(line) ? line.replace(/^--/, '*') : null;
+        return /^\s{0,6}\*/.test(line) ? line.replace(/^\s{0,6}/, '') : null;
+      };
+
       const flush = () => {
         if (blockLines.length) {
-          blocks.push({ kind: 'doc', label: programId || '', rawLines: [...blockLines], anchor: 'b' + blocks.length });
+          blocks.push({
+            kind: 'doc',
+            label: programId || '',
+            rawLines: [...blockLines],
+            anchor: (programId || 'block') + '_b' + blocks.length
+          });
         }
         blockLines = [];
       };
 
       for (const line of lines) {
-        // Delimiter: line is ONLY *>** with optional whitespace
-        if (/^\s*\*>\s*\*\*\s*$/.test(line)) {
+        if (isDelimiter(line)) {
           if (inBlock) { flush(); inBlock = false; }
           else { inBlock = true; }
           continue;
         }
         if (inBlock) {
-          // Accept any line that starts with * (in cols 1-7) — covers all COBOL comment variants
-          if (/^\s{0,6}\*/.test(line)) {
-            blockLines.push(line.replace(/^\s{0,6}/, ''));
-          }
-          // Non-* lines (code) silently ignored
+          const content = extractContent(line);
+          if (content !== null) blockLines.push(content);
         }
       }
       if (inBlock && blockLines.length) flush();
@@ -990,40 +1056,35 @@
 
     function parseFile(f) {
       const programId = detectProgramId(f.content, f.type);
-      const blocks = parseBlocks(f.content, programId);
+      const blocks = parseBlocks(f.content, programId, f.type);
       return { programId, blocks };
     }
 
     // ════════════════════════════════════════════════════════════════
     // RENDER BLOCK
     // ════════════════════════════════════════════════════════════════
-    function renderBlock(rawLines) {
+    function renderBlock(rawLines, blockAnchor) {
       const metaFields = {}, changes = [], inputs = [], outputs = [], db2s = [], refs = [];
       const items = [];
+      let titleIdx = 0;
 
       for (const raw of rawLines) {
         const t = raw.trim();
-
-        // *>** inside — shouldn't happen but skip
         if (/^\*>\s*\*\*/.test(t)) continue;
 
-        // *= H1
         if (/^\*=\s*/.test(t)) {
-          items.push({ type: 'h1', text: t.replace(/^\*=\s*/, '').trim() }); continue;
+          const text = t.replace(/^\*=\s*/, '').trim();
+          const anchor = blockAnchor + '_h2_' + titleIdx++;
+          items.push({ type: 'h2', text, anchor }); continue;
         }
-        // *-* H2
         if (/^\*-\*\s+/.test(t)) {
-          items.push({ type: 'h2', text: t.replace(/^\*-\*\s+/, '').trim() }); continue;
+          const text = t.replace(/^\*-\*\s+/, '').trim();
+          const anchor = blockAnchor + '_h3_' + titleIdx++;
+          items.push({ type: 'h3', text, anchor }); continue;
         }
-        // *- alone → hr
-        if (/^\*-\s*$/.test(t)) {
-          items.push({ type: 'hr' }); continue;
-        }
-        // * alone → br
-        if (/^\*\s*$/.test(t)) {
-          items.push({ type: 'br' }); continue;
-        }
-        // *- @directive
+        if (/^\*-\s*$/.test(t)) { items.push({ type: 'hr' }); continue; }
+        if (/^\*\s*$/.test(t)) { items.push({ type: 'br' }); continue; }
+
         if (/^\*-\s*@/.test(t)) {
           const inner = t.replace(/^\*-\s*/, '');
           const atM = inner.match(/^@([a-zA-Z\-]+)[:\s]\s*(.*)/);
@@ -1039,24 +1100,14 @@
               case 'input': inputs.push(val); break;
               case 'output': outputs.push(val); break;
               case 'db2': db2s.push(val); break;
-              case 'see': {
-                const sM = val.match(/^([A-Z0-9\-@#$]+)\s+(https?:\/\/\S+)/i);
-                if (sM) refs.push({ kind: 'see', name: sM[1].toUpperCase(), url: sM[2] });
-                else { const uM = val.match(/^(https?:\/\/\S+)/i); if (uM) refs.push({ kind: 'see', name: 'Ref', url: uM[1] }); }
-                break;
-              }
-              case 'uses': {
-                const uM = val.match(/^([A-Z0-9\-@#$]+)(?:\s+(https?:\/\/\S+))?/i);
-                if (uM) refs.push({ kind: 'uses', name: uM[1].toUpperCase(), url: uM[2] || null });
-                break;
-              }
+              case 'see': { const sM = val.match(/^([A-Z0-9\-@#$]+)\s+(https?:\/\/\S+)/i); if (sM) refs.push({ kind: 'see', name: sM[1].toUpperCase(), url: sM[2] }); else { const uM = val.match(/^(https?:\/\/\S+)/i); if (uM) refs.push({ kind: 'see', name: 'Ref', url: uM[1] }); } break; }
+              case 'uses': { const uM = val.match(/^([A-Z0-9\-@#$]+)(?:\s+(https?:\/\/\S+))?/i); if (uM) refs.push({ kind: 'uses', name: uM[1].toUpperCase(), url: uM[2] || null }); break; }
               case 'change': changes.push(val); break;
               default: items.push({ type: 'p', label: atM[1], text: val });
             }
           }
           continue;
         }
-        // * @directive (without dash)
         if (/^\*\s*@/.test(t)) {
           const inner = t.replace(/^\*\s*/, '');
           const atM = inner.match(/^@([a-zA-Z\-]+)[:\s]\s*(.*)/);
@@ -1072,67 +1123,57 @@
               case 'input': inputs.push(val); break;
               case 'output': outputs.push(val); break;
               case 'db2': db2s.push(val); break;
-              case 'see': {
-                const sM = val.match(/^([A-Z0-9\-@#$]+)\s+(https?:\/\/\S+)/i);
-                if (sM) refs.push({ kind: 'see', name: sM[1].toUpperCase(), url: sM[2] });
-                break;
-              }
-              case 'uses': {
-                const uM = val.match(/^([A-Z0-9\-@#$]+)/i);
-                if (uM) refs.push({ kind: 'uses', name: uM[1].toUpperCase(), url: null });
-                break;
-              }
+              case 'see': { const sM = val.match(/^([A-Z0-9\-@#$]+)\s+(https?:\/\/\S+)/i); if (sM) refs.push({ kind: 'see', name: sM[1].toUpperCase(), url: sM[2] }); break; }
+              case 'uses': { const uM = val.match(/^([A-Z0-9\-@#$]+)/i); if (uM) refs.push({ kind: 'uses', name: uM[1].toUpperCase(), url: null }); break; }
               case 'change': changes.push(val); break;
               default: items.push({ type: 'p', label: atM[1], text: val });
             }
           }
           continue;
         }
-        // *- text → paragraph
-        if (/^\*-\s+/.test(t)) {
-          items.push({ type: 'p', text: t.replace(/^\*-\s+/, '').trim() }); continue;
-        }
-        // * text → paragraph
-        if (/^\*\s+/.test(t)) {
-          items.push({ type: 'p', text: t.replace(/^\*\s+/, '').trim() }); continue;
-        }
+        if (/^\*-\s+/.test(t)) { items.push({ type: 'p', text: t.replace(/^\*-\s+/, '').trim() }); continue; }
+        if (/^\*\s+/.test(t)) { items.push({ type: 'p', text: t.replace(/^\*\s+/, '').trim() }); continue; }
       }
 
-      // Build HTML
       let html = '';
       for (const item of items) {
-        if (item.type === 'h1') html += `<div class="doc-h1">${esc(item.text)}</div>`;
-        else if (item.type === 'h2') html += `<div class="doc-h2">${esc(item.text)}</div>`;
+        if (item.type === 'h2') html += `<div class="doc-h2" id="${item.anchor}">${esc(item.text)}</div>`;
+        else if (item.type === 'h3') html += `<div class="doc-h3" id="${item.anchor}">${esc(item.text)}</div>`;
         else if (item.type === 'hr') html += `<div class="doc-hr"></div>`;
         else if (item.type === 'br') html += `<div class="doc-br"></div>`;
         else if (item.type === 'p' && item.label) html += `<div class="doc-p"><b>${esc(item.label)}:</b> ${esc(item.text)}</div>`;
         else if (item.type === 'p') html += `<div class="doc-p">${esc(item.text)}</div>`;
       }
 
-      // Meta grid
       const me = [['Autor', metaFields.autor], ['Fecha', metaFields.fecha], ['Versión', metaFields.version], ['Licencia', metaFields.licencia], ['Última modificación', metaFields.modificacion]].filter(([, v]) => v);
       if (me.length) html += `<div class="meta-grid">` + me.map(([k, v]) => `<div class="meta-item"><strong>${k}</strong>${esc(v)}</div>`).join('') + `</div>`;
 
-      // IO
       const io = [...inputs.map(v => ({ b: 'io-in', l: 'INPUT', v })), ...outputs.map(v => ({ b: 'io-out', l: 'OUTPUT', v })), ...db2s.map(v => ({ b: 'io-db2', l: 'DB2', v }))];
       if (io.length) html += `<ul class="io-list">` + io.map(x => { const p = x.v.split(/\s+(.*)/); return `<li><span class="io-badge ${x.b}">${x.l}</span><span class="io-ddname">${esc(p[0])}</span>${p[1] ? ' — ' + esc(p[1]) : ''}</li>` }).join('') + `</ul>`;
 
-      // Changes
       if (changes.length) html += `<div class="change-table-wrap"><div class="change-table-title">Historial de cambios</div><table class="change-table"><thead><tr><th>Fecha</th><th>Autor</th><th>Descripción</th></tr></thead><tbody>` + changes.map(c => { const p = c.split(/\s+/, 3); return `<tr><td>${esc(p[0] || '')}</td><td>${esc(p[1] || '')}</td><td>${esc(c.replace(p[0] || '', '').replace(p[1] || '', '').trim())}</td></tr>` }).join('') + `</tbody></table></div>`;
 
-      // Refs
       if (refs.length) html += `<div class="refs-section"><div class="refs-section-label">Rutinas</div><div class="refs-bar">` + refs.map(r => { const icon = r.kind === 'see' ? '↗' : '⟶'; const inner = `<span class="ref-rlabel">${r.kind === 'see' ? 'ver' : 'usa'}</span><span class="ref-name">${esc(r.name)}</span><span class="ref-icon">${icon}</span>`; return r.url ? `<a href="${r.url}" target="_blank" class="ref-badge ref-${r.kind}">${inner}</a>` : `<span class="ref-badge ref-${r.kind}">${inner}</span>` }).join('') + `</div></div>`;
 
       return html;
     }
 
-    // Extract H1/H2 titles from rawLines for sidebar
-    function extractTitles(rawLines) {
+    // ════════════════════════════════════════════════════════════════
+    // EXTRACT TITLES — returns titles with their own unique anchor
+    // ════════════════════════════════════════════════════════════════
+    function extractTitles(rawLines, blockAnchor) {
       const titles = [];
+      let idx = 0;
       for (const raw of rawLines) {
         const t = raw.trim();
-        if (/^\*=\s*/.test(t)) titles.push({ level: 'h1', text: t.replace(/^\*=\s*/, '').trim() });
-        else if (/^\*-\*\s+/.test(t)) titles.push({ level: 'h2', text: t.replace(/^\*-\*\s+/, '').trim() });
+        if (/^\*=\s*/.test(t)) {
+          titles.push({ level: 'h2', text: t.replace(/^\*=\s*/, '').trim(), anchor: blockAnchor + '_h2_' + idx++ });
+        } else if (/^\*-\*\s+/.test(t)) {
+          titles.push({ level: 'h3', text: t.replace(/^\*-\*\s+/, '').trim(), anchor: blockAnchor + '_h3_' + idx++ });
+        } else {
+          // count non-title lines that don't generate anchors — skip
+          if (/^\*=\s*/.test(t) || /^\*-\*\s+/.test(t)) idx++;
+        }
       }
       return titles;
     }
@@ -1147,19 +1188,19 @@
       if (!blocks.length) {
         body = `<div class="empty-file">No se encontraron bloques *>** en este dataset.</div>`;
       } else {
-        blocks.forEach((b, i) => {
-          const rendered = renderBlock(b.rawLines);
+        blocks.forEach((b) => {
+          const rendered = renderBlock(b.rawLines, b.anchor);
           body += `<div class="doc-block" id="${b.anchor}">${rendered}</div>`;
         });
       }
       return `<div class="file-card" id="card-${f.id}">
-    <div class="file-card-header">
-      <span class="ftype ftype-${f.type}">${f.type.toUpperCase()}</span>
-      <span class="file-card-name">${esc(title)}</span>
-      <span class="file-card-meta">${esc(f.name)} · ${blocks.length} bloque${blocks.length !== 1 ? 's' : ''}</span>
-    </div>
-    <div class="file-card-body">${body}</div>
-  </div>`;
+                <div class="file-card-header">
+                  <span class="ftype ftype-${f.type}">${f.type.toUpperCase()}</span>
+                  <span class="file-card-name">${esc(title)}</span>
+                  <span class="file-card-meta">${esc(f.name)} · ${blocks.length} bloque${blocks.length !== 1 ? 's' : ''}</span>
+                </div>
+                <div class="file-card-body">${body}</div>
+              </div>`;
     }
 
     // ════════════════════════════════════════════════════════════════
@@ -1173,20 +1214,16 @@
         const title = programId || f.name.replace(/\.[^.]+$/, '').toUpperCase();
         let items = '';
         blocks.forEach(b => {
-          const titles = extractTitles(b.rawLines);
-          if (titles.length) {
-            titles.forEach(t => {
-              items += `<li class="toc-${t.level}"><a href="#${b.anchor}" title="${esc(t.text)}">${esc(t.text)}</a></li>`;
-            });
-          } else {
-            // block has no H1/H2 — use anchor only, no sidebar entry
-          }
+          const titles = extractTitles(b.rawLines, b.anchor);
+          titles.forEach(t => {
+            items += `<li class="toc-${t.level}"><a href="#${t.anchor}" title="${esc(t.text)}">${esc(t.text)}</a></li>`;
+          });
         });
         html += `<div class="file-group">
-      <div class="file-group-header" onclick="document.getElementById('card-${f.id}').scrollIntoView({behavior:'smooth'})">
-        <span class="ftype ftype-${f.type}">${f.type.toUpperCase()}</span>${esc(title)}
-      </div>${items ? `<ul class="file-toc">${items}</ul>` : ''}
-    </div>`;
+                   <div class="file-group-header" onclick="document.getElementById('card-${f.id}').scrollIntoView({behavior:'smooth'})">
+                     <span class="ftype ftype-${f.type}">${f.type.toUpperCase()}</span>${esc(title)}
+                   </div>${items ? `<ul class="file-toc">${items}</ul>` : ''}
+                 </div>`;
       }
       return html;
     }
@@ -1196,7 +1233,7 @@
     // ════════════════════════════════════════════════════════════════
     function buildDocs() {
       if (!state.files.length) return;
-      state.projectName = document.getElementById('project-name').value.trim().toUpperCase();;
+      state.projectName = document.getElementById('project-name').value.trim().toUpperCase();
       state.projectUrl = document.getElementById('project-url').value.trim();
       const parsedList = state.files.map(f => parseFile(f));
       const now = new Date().toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -1228,49 +1265,47 @@
       const proj = state.projectName || 'COBOL Documentation';
       const now = new Date().toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' });
       const html = `<!DOCTYPE html>
-      <html lang="es">
-      <head>
-        <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>${esc(proj)}</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"><\/script>
-        <style>${st}</style>
-      </head>
-      <body>
-        <div id="app">
-          <div class="topbar"><div class="topbar-logo">
-            <span class="slash">▊</span> COBOL<span style="color:var(--muted)">Doc</span>
-          </div>
-          <div class="topbar-actions"><span style="font-size:12px;color:var(--muted)">Generado: ${now}</span>
-            <button class="btn btn-info btn-sm" id="btn-readme" onclick="viewReadme()">README GITHUB</button>
-          </div>
-        </div>
-        <div class="layout">
-          <div class="sidebar" style="display:flex">
-            <div class="sidebar-head">Datasets</div>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>${esc(proj)}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"><\/script>
+  <style>${st}</style>
+</head>
+<body>
+  <div id="app">
+    <div class="topbar">
+      <div class="topbar-logo"><span class="slash">▊</span> COBOL<span style="color:var(--muted)">Doc</span></div>
+      <div class="topbar-actions">
+        <span style="font-size:12px;color:var(--muted)">Generado: ${now}</span>
+        <button class="btn btn-info btn-sm" onclick="viewReadme()">README GITHUB</button>
+      </div>
+    </div>
+    <div class="layout">
+      <div class="sidebar" style="display:flex">
+        <div class="sidebar-head">Datasets</div>
         <div class="sidebar-scroll">${tc}</div>
-        </div>
-        <div class="main-scroll">
-          <div class="content">${dc}</div>
-          </div>
-          </div>
-        </div>
-          <script>
-          const projectUrl = "${state.projectUrl || ''}";
-          function viewReadme() {
-            if (projectUrl && projectUrl.trim()) window.open(projectUrl, '_blank');
-              else Swal.fire({ title: '⛔ No se encontró la URL', text: 'Este Proyecto no tiene un Repositorio asociado.', icon: 'warning', background: '#1e1e2f', color: '#fff' });
-             }
-         <\/script>
-      </body>
-      </html>`;
+      </div>
+      <div class="main-scroll">
+        <div class="content">${dc}</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const projectUrl = "${state.projectUrl || ''}";
+    function viewReadme() {
+      if (projectUrl && projectUrl.trim()) window.open(projectUrl, '_blank');
+      else Swal.fire({ title: '⛔ No se encontró la URL', text: 'Este Proyecto no tiene un Repositorio asociado.', icon: 'warning', background: '#1e1e2f', color: '#fff' });
+    }
+  <\/script>
+</body>
+</html>`;
       const a = document.createElement('a');
       a.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
       a.download = proj.toLowerCase().replace(/\s+/g, '-') + '.html';
       a.click();
-
     }
 
     // ════════════════════════════════════════════════════════════════
@@ -1285,9 +1320,6 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}html{font-size:13px}
 body{background:#fff;color:#1a1a2e;font-family:'IBM Plex Sans',sans-serif;line-height:1.65;padding:2cm 2.5cm}
-h1.pt{font-size:22px;font-weight:700;text-align:center;margin-bottom:4px}
-.pd{font-size:11px;color:#666;text-align:center;font-family:'IBM Plex Mono',monospace;margin-bottom:1.5rem}
-.pdiv{border:none;border-top:2px solid #1a1a2e;margin-bottom:2rem}
 .project-banner{text-align:center;padding:1rem 0 1.5rem;border-bottom:2px solid #1a1a2e;margin-bottom:1.5rem}
 .project-banner h1{font-size:24px;font-weight:700}
 .project-banner .project-sub{font-size:10px;color:#666;font-family:'IBM Plex Mono',monospace;margin-top:.2rem}
@@ -1301,9 +1333,9 @@ h1.pt{font-size:22px;font-weight:700;text-align:center;margin-bottom:4px}
 .ftype-cpy{background:#d9f5f7;color:#0a6a70}.ftype-sql{background:#fff4d4;color:#7a5500}
 .doc-block{margin-bottom:1.25rem;page-break-inside:avoid}
 .doc-block+.doc-block{border-top:1px solid #dde1ea;padding-top:1.25rem}
-.doc-h1{font-size:18px;font-weight:700;color:#1a4a8a;margin-bottom:.5rem}
-.doc-h2{font-size:14px;font-weight:600;color:#5a3fa0;margin:.7rem 0 .2rem;display:flex;align-items:center;gap:6px}
-.doc-h2::before{content:'';display:inline-block;width:3px;height:13px;background:#5a3fa0;border-radius:2px}
+.doc-h2{font-size:18px;font-weight:700;color:#1a4a8a;margin-bottom:.5rem}
+.doc-h3{font-size:14px;font-weight:600;color:#5a3fa0;margin:.7rem 0 .2rem;display:flex;align-items:center;gap:6px}
+.doc-h3::before{content:'';display:inline-block;width:3px;height:13px;background:#5a3fa0;border-radius:2px}
 .doc-p{font-size:12px;color:#333;margin-bottom:.3rem;line-height:1.7}
 .doc-p b{font-weight:600;color:#1a1a2e}
 .doc-hr{border:none;border-top:1px solid #dde1ea;margin:1rem 0}
@@ -1335,32 +1367,27 @@ ${dc}
       const w = window.open('', '_blank');
       if (w) { w.document.write(html); w.document.close(); }
     }
+
     // ════════════════════════════════════════════════════════════════
-    // Navegar al README del repositorio
+    // README
     // ════════════════════════════════════════════════════════════════
     function viewReadme() {
-      // 1. Se obtiene la URL de la variable global 'state'
       let url = state.projectUrl;
-
-      // 2. Validación: si la URL existe y no está vacía, la abre
       if (url && url.trim() !== "") {
         window.open(url, '_blank', 'noopener,noreferrer');
-        return; // Importante: aquí termina la ejecución si todo está bien
+        return;
       }
-
-      // 3. Si no hay URL, se muestra la alerta moderna con SweetAlert2
       Swal.fire({
         title: '⛔ No se encontró la URL',
         text: 'Este Proyecto no tiene un Repositorio asociado.',
         icon: 'warning',
         confirmButtonText: 'Entendido',
         confirmButtonColor: '#3085d6',
-        background: '#1e1e2f',    // fondo oscuro
-        color: '#ffffff'          // texto blanco
+        background: '#1e1e2f',
+        color: '#ffffff'
       });
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
-
 </html>
