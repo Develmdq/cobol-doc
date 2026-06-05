@@ -2,7 +2,7 @@
 
 ##  COBOL-DOC
 
-**Generador de documentación para proyectos COBOL Mainframe**
+**Generador de documentación para proyectos COBOL**
 *Lee los comentarios del fuente. Genera un sitio navegable. Sin instalar nada.*
 
 [![GitHub Pages](https://img.shields.io/badge/demo-live-58a6ff?style=flat-square&logo=github)](https://develmdq.github.io/docs/cobol-doc.html)
@@ -20,12 +20,13 @@ Un único archivo HTML — doble clic, abre en el navegador — que procesa arch
 
 ## Uso rápido
 
-1. Abrir `cobol-doc.html` en cualquier navegador
-2. Ingresar el nombre del proyecto
-3. Arrastrar los archivos fuente
-4. Clic en **Generar documentación**
-5. **Exportar HTML** → `index.html` listo para GitHub Pages
-   **Exportar PDF** → versión imprimible
+1. Abrir `cobol-doc.html` en cualquier navegador.
+2. Ingresar el nombre del proyecto.
+3. Ingresa URL del repositorio en GITHUB.
+4. Arrastrar los archivos fuente.
+5. Clic en **Generar documentación**.
+6. **Exportar HTML** → `index.html` listo para GitHub Pages.
+   **Exportar PDF** → versión imprimible.
 
 ---
 
@@ -95,8 +96,6 @@ Las directivas se escriben con `* @nombre: valor`. El símbolo `@` no se renderi
       * @output: DDNAME_SALIDA   Descripción del dataset de salida
       * @db2:    NOMBRE_TABLA    Descripción de la tabla o recurso DB2
 ```
-
-El primer token después de la directiva es el DDname o nombre de tabla. El resto es la descripción.
 
 #### Historial de cambios
 
