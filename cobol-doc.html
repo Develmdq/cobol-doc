@@ -153,6 +153,16 @@
       background: #1f381f
     }
 
+    .btn-img {
+      background: #1a2130;
+      border-color: var(--teal);
+      color: var(--teal)
+    }
+
+    .btn-img:hover {
+      background: #1e2e3d
+    }
+
     .btn-danger {
       background: transparent;
       border-color: #da3633;
@@ -812,6 +822,77 @@
       padding-top: 1.5rem
     }
 
+    /* SCREENSHOTS SECTION */
+    .screenshots-section {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--border2)
+    }
+
+    .screenshots-title {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .screenshots-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      background: var(--teal);
+      border-radius: 2px;
+      flex-shrink: 0
+    }
+
+    .screenshots-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem
+    }
+
+    .screenshot-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden
+    }
+
+    .screenshot-item-header {
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px
+    }
+
+    .screenshot-item-name {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .screenshot-item-body {
+      padding: 1rem;
+      text-align: center
+    }
+
+    .screenshot-item-body img {
+      max-width: 100%;
+      border-radius: 4px;
+      display: block;
+      margin: 0 auto
+    }
+
     @media(max-width:760px) {
       .sidebar {
         display: none
@@ -834,6 +915,7 @@
       <div class="topbar-logo"><span class="slash">📖</span>COBOL<span style="color:var(--muted)">Doc</span></div>
       <div class="topbar-actions">
         <span id="file-count-label" style="font-size:12px;color:var(--muted);display:none"></span>
+        <button class="btn btn-img" id="btn-img" style="display:none" onclick="triggerImageInput()">📷 Agregar imagen</button>
         <button class="btn btn-primary" id="btn-export" style="display:none" onclick="exportHtml()">Exportar HTML</button>
         <button class="btn btn-pdf" id="btn-pdf" style="display:none" onclick="exportPdf()">Exportar PDF</button>
         <button class="btn btn-danger btn-sm" id="btn-clear" style="display:none" onclick="clearAll()">Limpiar</button>
@@ -885,10 +967,11 @@
   </div>
   <input type="file" id="file-input" multiple accept=".cbl,.cob,.jcl,.cpy,.sql,.txt" style="display:none">
   <input type="file" id="file-input-add" multiple accept=".cbl,.cob,.jcl,.cpy,.sql,.txt" style="display:none">
+  <input type="file" id="image-input" multiple accept="image/*" style="display:none">
 
   <script>
     // ── STATE ──
-    const state = { files: [], projectName: '', projectUrl: '' };
+    const state = { files: [], projectName: '', projectUrl: '', screenshots: [] };
 
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('upload-zone').style.display = 'flex';
@@ -966,16 +1049,92 @@
     function removeFile(id) { state.files = state.files.filter(f => f.id !== id); state.files.length ? showPendingList() : document.getElementById('pending-list').style.display = 'none'; }
 
     function clearAll() {
-      state.files = []; state.projectName = '';
+      state.files = []; state.projectName = ''; state.screenshots = [];
       document.getElementById('doc-output').style.display = 'none';
       document.getElementById('doc-output').innerHTML = '';
       document.getElementById('upload-zone').style.display = 'flex';
       document.getElementById('sidebar').style.display = 'none';
       document.getElementById('pending-list').style.display = 'none';
       document.getElementById('btn-readme').style.display = 'none';
+      document.getElementById('btn-img').style.display = 'none';
       document.getElementById('project-name').value = '';
       document.getElementById('project-url').value = '';
       ['btn-export', 'btn-pdf', 'btn-clear', 'file-count-label'].forEach(id => document.getElementById(id).style.display = 'none');
+    }
+
+    // ════════════════════════════════════════════════════════════════
+    // IMAGE SCREENSHOTS
+    // ════════════════════════════════════════════════════════════════
+    function triggerImageInput() {
+      const ii = document.getElementById('image-input');
+      ii.value = '';
+      ii.onchange = e => handleImages(e.target.files);
+      ii.click();
+    }
+
+    function handleImages(fileList) {
+      const p = [];
+      for (const f of fileList) {
+        if (!f.type.startsWith('image/')) continue;
+        p.push(new Promise(res => {
+          const r = new FileReader();
+          r.onload = e => {
+            state.screenshots.push({ name: f.name, dataUrl: e.target.result, id: 'img' + Date.now() + Math.random().toString(36).slice(2, 6) });
+            res();
+          };
+          r.readAsDataURL(f);
+        }));
+      }
+      Promise.all(p).then(() => { if (state.screenshots.length) renderScreenshots(); });
+    }
+
+    function renderScreenshots() {
+      const out = document.getElementById('doc-output');
+      let section = document.getElementById('screenshots-section');
+      if (!section) {
+        section = document.createElement('div');
+        section.id = 'screenshots-section';
+        out.appendChild(section);
+      }
+      section.className = 'screenshots-section';
+      section.innerHTML = `
+        <div class="screenshots-title">Capturas de salida</div>
+        <div class="screenshots-grid">
+          ${state.screenshots.map(img => `
+            <div class="screenshot-item" id="si-${img.id}">
+              <div class="screenshot-item-header">
+                <span class="screenshot-item-name">${esc(img.name)}</span>
+                <button class="btn btn-sm" style="color:var(--coral);border-color:var(--coral)" onclick="removeScreenshot('${img.id}')">✕</button>
+              </div>
+              <div class="screenshot-item-body">
+                <img src="${img.dataUrl}" alt="${esc(img.name)}">
+              </div>
+            </div>`).join('')}
+        </div>`;
+      refreshSidebarScreenshots();
+    }
+
+    function removeScreenshot(id) {
+      state.screenshots = state.screenshots.filter(img => img.id !== id);
+      if (state.screenshots.length) {
+        renderScreenshots();
+      } else {
+        const section = document.getElementById('screenshots-section');
+        if (section) section.remove();
+      }
+      refreshSidebarScreenshots();
+    }
+
+    function refreshSidebarScreenshots() {
+      const toc = document.getElementById('sidebar-toc');
+      let node = document.getElementById('sidebar-screenshots');
+      if (state.screenshots.length) {
+        if (!node) { node = document.createElement('div'); node.id = 'sidebar-screenshots'; toc.appendChild(node); }
+        node.className = 'file-group';
+        node.innerHTML = `<div class="file-group-header" onclick="document.getElementById('screenshots-section').scrollIntoView({behavior:'smooth'})"><span style="font-size:13px;margin-right:2px">📷</span> Capturas de salida</div>`;
+      } else {
+        if (node) node.remove();
+      }
     }
 
     // ── DRAG & DROP FILE UPLOAD ──
@@ -1248,6 +1407,7 @@
       document.getElementById('btn-pdf').style.display = 'inline-block';
       document.getElementById('btn-clear').style.display = 'inline-block';
       document.getElementById('btn-readme').style.display = 'inline-block';
+      document.getElementById('btn-img').style.display = 'inline-block';
       const lbl = document.getElementById('file-count-label');
       lbl.textContent = state.files.length + ' dataset' + (state.files.length !== 1 ? 's' : '');
       lbl.style.display = 'inline';
@@ -1257,7 +1417,11 @@
     // EXPORT HTML
     // ════════════════════════════════════════════════════════════════
     function exportHtml() {
-      const dc = document.getElementById('doc-output').innerHTML;
+      // Clone doc-output and strip screenshot remove buttons before exporting
+      const outEl = document.getElementById('doc-output');
+      const clone = outEl.cloneNode(true);
+      clone.querySelectorAll('#screenshots-section .screenshot-item-header button').forEach(b => b.remove());
+      const dc = clone.innerHTML;
       const tc = document.getElementById('sidebar-toc').innerHTML;
       const st = document.querySelector('style').textContent;
       const proj = state.projectName || 'COBOL Documentation';
@@ -1310,7 +1474,10 @@
     // EXPORT PDF
     // ════════════════════════════════════════════════════════════════
     function exportPdf() {
-      const dc = document.getElementById('doc-output').innerHTML;
+      const outEl = document.getElementById('doc-output');
+      const clone = outEl.cloneNode(true);
+      clone.querySelectorAll('#screenshots-section .screenshot-item-header button').forEach(b => b.remove());
+      const dc = clone.innerHTML;
       const proj = state.projectName || 'COBOL Documentation';
       const now = new Date().toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' });
       const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>${esc(proj)}</title>
@@ -1357,6 +1524,15 @@ body{background:#fff;color:#1a1a2e;font-family:'IBM Plex Sans',sans-serif;line-h
 .ref-badge{display:inline-flex;align-items:center;gap:4px;font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid #c8cfe0;background:#f4f6fb}
 .ref-rlabel{font-size:9px;text-transform:uppercase;color:#888}.ref-name{font-weight:600}.ref-icon{color:#1a4a8a}
 .empty-file{font-size:11px;color:#888;font-family:'IBM Plex Mono',monospace;font-style:italic}
+.screenshots-section{margin-top:2.5rem;padding-top:2rem;border-top:2px solid #dde1ea;page-break-before:always}
+.screenshots-title{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#0a6a70;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.screenshots-title::before{content:'';display:inline-block;width:4px;height:14px;background:#0a6a70;border-radius:2px;flex-shrink:0}
+.screenshots-grid{display:flex;flex-direction:column;gap:1.25rem}
+.screenshot-item{border:1px solid #dde1ea;border-radius:6px;overflow:hidden;page-break-inside:avoid}
+.screenshot-item-header{background:#f4f6fb;border-bottom:1px solid #dde1ea;padding:6px 12px}
+.screenshot-item-name{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#555}
+.screenshot-item-body{padding:.75rem;text-align:center}
+.screenshot-item-body img{max-width:100%;border-radius:3px;display:block;margin:0 auto}
 @page{margin:2cm 2.5cm}
 </style></head><body>
 ${dc}
