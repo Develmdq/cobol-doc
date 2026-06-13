@@ -2,8 +2,8 @@
 
 ##  COBOL-DOC
 
-**Generador de documentación para proyectos COBOL**
-*Lee los comentarios del fuente. Genera un sitio navegable. Sin instalar nada.*
+**Generador de documentación para proyectos COBOL**   
+*Lee los comentarios del código fuente y genera un sitio navegable, sin necesidad de instalar nada.*
 
 [![GitHub Pages](https://img.shields.io/badge/demo-live-58a6ff?style=flat-square&logo=github)](https://develmdq.github.io/cobol-doc/)
 ![License](https://img.shields.io/badge/license-MIT-3fb950?style=flat-square)
