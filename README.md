@@ -12,21 +12,21 @@
 
 ---
 
-## ¿Qué es?
+## ¿Comó funciona?
 
-Un único archivo HTML — doble clic, abre en el navegador — que procesa archivos fuente y genera documentación navegable lista para publicar en **GitHub Pages**.
+App web que escanea archivos fuente y genera documentación en formato HTML y/o PDF.
 
 ---
 
 ## Uso rápido
 
-1. Abrir `cobol-doc.html` en cualquier navegador.
+1. Abrir `index.html` en cualquier navegador o pinchar [aquí](https://develmdq.github.io/cobol-doc/).
 2. Ingresar el nombre del proyecto.
 3. Ingresa URL del repositorio en GITHUB.
 4. Arrastrar los archivos fuente.
 5. Clic en **Generar documentación**.
-6. **Exportar HTML** → `index.html` listo para GitHub Pages.
-   **Exportar PDF** → versión imprimible.
+6. **Exportar HTML**.
+   **Exportar PDF**.
 
 ---
 
@@ -35,8 +35,6 @@ Un único archivo HTML — doble clic, abre en el navegador — que procesa arch
 `.cbl` `.cob` `.cpy` `.jcl` `.sql` `.txt` `.rex` `.rexx`
 
 ---
-
-## Cómo documentar el código fuente
 
 ### Reglas principales
 
@@ -48,15 +46,13 @@ Se vincula a un botón en el HTML final para acceder al repositorio documentado.
 
 **Solo se documenta lo que está dentro de un bloque `*>**`.**
 Todo lo que esté fuera — comentarios técnicos, notas de código — es ignorado por el generador.
+Cada bloque `*>**` genera una sección en el HTML.
 
 ```cobol
       *>**
       aquí va la documentación
       *>**
 ```
-
-Un archivo puede tener tantos bloques como sea necesario. Cada bloque `*>**` genera una sección en el HTML.
-
 ---
 
 ### Marcas disponibles dentro del bloque
