@@ -32,7 +32,7 @@ Un único archivo HTML — doble clic, abre en el navegador — que procesa arch
 
 ## Formatos soportados
 
-`.cbl` `.cob` `.cpy` `.jcl` `.sql` `.txt`
+`.cbl` `.cob` `.cpy` `.jcl` `.sql` `.txt` `.rex` `.rexx`
 
 ---
 

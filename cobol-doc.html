@@ -268,6 +268,11 @@
       color: var(--muted)
     }
 
+    .ftype-rexx {
+      background: rgba(255, 123, 114, .15);
+      color: var(--red, #ff7b72)
+    }
+
     .file-toc {
       list-style: none
     }
@@ -950,6 +955,8 @@
                 <span class="format-badge">.cpy</span>
                 <span class="format-badge">.sql</span>
                 <span class="format-badge">.txt</span>
+                <span class="format-badge">.rexx</span>
+                <span class="format-badge">.rex</span>
               </div>
             </div>
             <div class="added-files" id="pending-list" style="display:none">
@@ -965,8 +972,8 @@
       </div>
     </div>
   </div>
-  <input type="file" id="file-input" multiple accept=".cbl,.cob,.jcl,.cpy,.sql,.txt" style="display:none">
-  <input type="file" id="file-input-add" multiple accept=".cbl,.cob,.jcl,.cpy,.sql,.txt" style="display:none">
+  <input type="file" id="file-input" multiple accept=".cbl,.cob,.jcl,.cpy,.sql,.txt,.rexx,.rex" style="display:none">
+  <input type="file" id="file-input-add" multiple accept=".cbl,.cob,.jcl,.cpy,.sql,.txt,.rexx,.rex" style="display:none">
   <input type="file" id="image-input" multiple accept="image/*" style="display:none">
 
   <script>
@@ -985,7 +992,7 @@
       const p = [];
       for (const f of fileList) {
         const ext = f.name.split('.').pop().toLowerCase();
-        if (!['cbl', 'cob', 'jcl', 'cpy', 'sql', 'txt'].includes(ext)) continue;
+        if (!['cbl', 'cob', 'jcl', 'cpy', 'sql', 'txt', 'rexx', 'rex'].includes(ext)) continue;
         p.push(new Promise(res => {
           const r = new FileReader();
           r.onload = e => { state.files.push({ name: f.name, ext, type: extType(ext), content: e.target.result, id: 'f' + Date.now() + Math.random().toString(36).slice(2, 6), size: f.size }); res(); };
@@ -995,7 +1002,7 @@
       Promise.all(p).then(() => { if (!state.files.length) return; addMore ? buildDocs() : showPendingList(); });
     }
 
-    function extType(e) { return { cbl: 'cbl', cob: 'cbl', jcl: 'jcl', cpy: 'cpy', sql: 'sql', txt: 'txt' }[e] || 'txt'; }
+    function extType(e) { return { cbl: 'cbl', cob: 'cbl', jcl: 'jcl', cpy: 'cpy', sql: 'sql', txt: 'txt', rexx: 'rexx', rex: 'rexx' }[e] || 'txt'; }
 
     // ── DRAG & DROP REORDER IN PENDING LIST ──
     let dragSrcId = null;
@@ -1157,21 +1164,25 @@
       const delimiterRegex = {
         jcl: /^\/\/\*>\s*\*\*\s*$/,
         sql: /^--\*>\s*\*\*\s*$/,
+        rexx: /^(\/\*>\s*\*\*|\*>\s*\*\*\s*\/)\s*$/,
       };
       const contentRegex = {
         jcl: /^\/\/\*/,
         sql: /^--/,
+        rexx: /^\s*\*/,
       };
 
       const isDelimiter = (line) => {
         if (type === 'jcl') return delimiterRegex.jcl.test(line);
         if (type === 'sql') return delimiterRegex.sql.test(line);
+        if (type === 'rexx') return delimiterRegex.rexx.test(line);
         return /^\s*\*>\s*\*\*\s*$/.test(line);
       };
 
       const extractContent = (line) => {
         if (type === 'jcl') return contentRegex.jcl.test(line) ? line.replace(/^\/\/\*/, '*') : null;
         if (type === 'sql') return contentRegex.sql.test(line) ? line.replace(/^--/, '*') : null;
+        if (type === 'rexx') return contentRegex.rexx.test(line) ? line.replace(/^\s*/, '') : null;
         return /^\s{0,6}\*/.test(line) ? line.replace(/^\s{0,6}/, '') : null;
       };
 
@@ -1208,6 +1219,7 @@
         return m ? m[1].trim().toUpperCase() : null;
       }
       if (type === 'sql') return 'SQL';
+      if (type === 'rexx') return 'REXX';
       const m = src.match(/PROGRAM-ID\s*\.\s*([A-Z0-9\-@#$]+)/i);
       return m ? m[1].trim().toUpperCase() : null;
     }
@@ -1496,6 +1508,7 @@ body{background:#fff;color:#1a1a2e;font-family:'IBM Plex Sans',sans-serif;line-h
 .ftype{font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700}
 .ftype-cbl{background:#d4f5dc;color:#1a7a30}.ftype-jcl{background:#ede8ff;color:#5a3fa0}
 .ftype-cpy{background:#d9f5f7;color:#0a6a70}.ftype-sql{background:#fff4d4;color:#7a5500}
+.ftype-rexx{background:#ffe1de;color:#a02c20}
 .doc-block{margin-bottom:1.25rem;page-break-inside:avoid}
 .doc-block+.doc-block{border-top:1px solid #dde1ea;padding-top:1.25rem}
 .doc-h2{font-size:18px;font-weight:700;color:#1a4a8a;margin-bottom:.5rem}
